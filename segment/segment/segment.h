@@ -21,7 +21,7 @@ public:
 
     int init();
     int init(string model, string config);
-    int segment();
+    int segment(char* maskBuf);
     int destroy();
 private:
     int loadNet();

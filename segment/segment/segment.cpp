@@ -139,7 +139,7 @@ int FrameSegment::init()
     return 0;
 }
 
-int FrameSegment::segment()
+int FrameSegment::segment(char* maskBuf)
 {
     Scalar mean = { 0.0, 0.0, 0.0, 0.0 };
 
@@ -158,7 +158,49 @@ int FrameSegment::segment()
 
     net.forward(outs, outNames);
 
-    postprocess(frame, outs);
+    //postprocess(frame, outs);
+
+    Mat outDetections = outs[0];
+    Mat outMasks = outs[1];
+    const int numDetections = outDetections.size[2];
+    const int numClasses = outMasks.size[1];
+    outDetections = outDetections.reshape(1, outDetections.total() / 7);
+    for (int i = 0; i < numDetections; ++i)
+    {
+        float score = outDetections.at<float>(i, 2);
+        if (score > confThreshold)
+        {
+            // Extract the bounding box
+            int classId = static_cast<int>(outDetections.at<float>(i, 1));
+            int left = static_cast<int>(frame.cols * outDetections.at<float>(i, 3));
+            int top = static_cast<int>(frame.rows * outDetections.at<float>(i, 4));
+            int right = static_cast<int>(frame.cols * outDetections.at<float>(i, 5));
+            int bottom = static_cast<int>(frame.rows * outDetections.at<float>(i, 6));
+
+            left = max(0, min(left, frame.cols - 1));
+            top = max(0, min(top, frame.rows - 1));
+            right = max(0, min(right, frame.cols - 1));
+            bottom = max(0, min(bottom, frame.rows - 1));
+            Rect box = Rect(left, top, right - left + 1, bottom - top + 1);
+
+            // Extract the mask for the object
+            Mat objectMask(outMasks.size[2], outMasks.size[3], CV_32F, outMasks.ptr<float>(i, classId));
+
+            // Resize the mask, threshold, color and apply it on the image
+            resize(objectMask, objectMask, Size(box.width, box.height));
+            Mat mask = (objectMask > maskThreshold);
+
+            for (int y=top; y < bottom; y++)
+            {
+                for (int x= left; x < right; x++)
+                {
+                    maskBuf[y*frame.cols + x] = mask.at<char>(y-top, x-left);
+                }
+            }
+
+            break;
+        }
+    }
 
     return 0;
 }

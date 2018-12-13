@@ -1,5 +1,13 @@
 #include "segment.h"
 
+#include <opencv2/dnn.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+
+using namespace cv;
+using namespace dnn;
+
+
 vector<string> classes = { 
     "person","bicycle","car","motorcycle","airplane","bus","train","truck","boat","traffic light",
     "fire hydrant","","stop sign","parking meter","bench","bird","cat","dog","horse","sheep","cow","elephant",
@@ -39,6 +47,8 @@ int FrameSegment::init()
 
 int FrameSegment::segment()
 {
+    Scalar mean = { 0.0, 0.0, 0.0, 0.0 };
+
     return 0;
 }
 

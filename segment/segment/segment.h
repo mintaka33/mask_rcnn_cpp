@@ -5,19 +5,13 @@
 #include <iostream>
 #include <string.h>
 
-#include <opencv2/dnn.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+using namespace std;
 
 #ifdef MAKE_DLL
 #  define DLLEXPORT __declspec(dllexport)
 #else
 #  define DLLEXPORT __declspec(dllimport)
 #endif
-
-using namespace cv;
-using namespace dnn;
-using namespace std;
 
 class DLLEXPORT FrameSegment
 {
@@ -41,7 +35,6 @@ private:
     int backendId = 0;
     int targetId = 0;
     float scale = (float)1.0; // (1/255)
-    Scalar mean = { 0.0, 0.0, 0.0, 0.0 };
     bool swapRB = true;
 };
 

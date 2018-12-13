@@ -9,11 +9,17 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
+#ifdef MAKE_DLL
+#  define DLLEXPORT __declspec(dllexport)
+#else
+#  define DLLEXPORT __declspec(dllimport)
+#endif
+
 using namespace cv;
 using namespace dnn;
 using namespace std;
 
-class FrameSegment
+class DLLEXPORT FrameSegment
 {
 public:
     FrameSegment();
@@ -29,8 +35,8 @@ private:
 private:
     float confThreshold = (float) 0.9; // Confidence threshold
     float maskThreshold = (float) 0.3; // Mask threshold
-    string model;
-    string config;
+    string model = "";
+    string config = "";
     string framework = "";
     int backendId = 0;
     int targetId = 0;

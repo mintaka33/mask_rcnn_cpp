@@ -33,7 +33,7 @@ private:
     string config = "";
     string framework = "";
     int backendId = 0;
-    int targetId = 0;
+    int targetId = 0; // 0: CPU; 1: OpenCL GPU
     float scale = (float)1.0; // (1/255)
     bool swapRB = true;
 };

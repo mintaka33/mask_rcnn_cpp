@@ -1,11 +1,13 @@
 # mask_rcnn_cpp
 Mask-RCNN segmentation in C++
 
-code sample for using segment library
-```c++
-    int width = 1280;
-    int height = 720;
+## download library from release page
 
+https://github.com/mintaka33/mask_rcnn_cpp/releases/download/v1.0.0/release_v1.0.0.7z
+
+
+## code sample for using segment library
+```c++
     // prepare input data, need nv12 format
     int szBufNV12 = width * height * 3 / 2;
     char *bufNV12 = new char[szBufNV12];

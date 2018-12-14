@@ -117,12 +117,13 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(OPENCV_DIR)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OPENCV_DIR)\staticlib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>IlmImfd.lib;ittnotifyd.lib;libjasperd.lib;libjpeg-turbod.lib;libpngd.lib;libprotobufd.lib;libtiffd.lib;libwebpd.lib;opencv_calib3d400d.lib;opencv_core400d.lib;opencv_dnn400d.lib;opencv_features2d400d.lib;opencv_flann400d.lib;opencv_highgui400d.lib;opencv_imgcodecs400d.lib;opencv_imgproc400d.lib;opencv_ml400d.lib;opencv_objdetect400d.lib;opencv_photo400d.lib;opencv_stitching400d.lib;opencv_video400d.lib;opencv_videoio400d.lib;quircd.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IlmImf.lib;ittnotify.lib;libjasper.lib;libjpeg-turbo.lib;libpng.lib;libprotobuf.lib;libtiff.lib;libwebp.lib;opencv_calib3d400.lib;opencv_core400.lib;opencv_dnn400.lib;opencv_features2d400.lib;opencv_flann400.lib;opencv_highgui400.lib;opencv_imgcodecs400.lib;opencv_imgproc400.lib;opencv_ml400.lib;opencv_objdetect400.lib;opencv_photo400.lib;opencv_stitching400.lib;opencv_video400.lib;opencv_videoio400.lib;quirc.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

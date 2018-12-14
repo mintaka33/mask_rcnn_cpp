@@ -113,6 +113,31 @@ void postprocess(Mat& frame, const std::vector<Mat>& outs)
     }
 }
 
+void cvtNV12toYV12(char* yv12Buf, char* nv12Buf, int w, int h)
+{
+    int yv12Size = w * h * 3 / 2;
+    char* srcY = nv12Buf;
+    char* srcUV = nv12Buf + w * h;
+
+    // Copy Y plane
+    int ySize = w * h;
+    memcpy_s(yv12Buf, ySize, srcY, ySize);
+
+    // Copy U/V planes
+    int uWidth = w / 2;
+    int uHeight = h / 2;
+    char* dstU = yv12Buf + ySize;
+    char* dstV = dstU + uWidth * uHeight;
+    for (int i = 0; i < h / 2; i++)
+    {
+        for (int j = 0; j < w / 2; j++)
+        {
+            dstV[i*uWidth + j] = srcUV[i*uWidth * 2 + j * 2];
+            dstU[i*uWidth + j] = srcUV[i*uWidth * 2 + j * 2 + 1];
+        }
+    }
+}
+
 FrameSegment::FrameSegment()
 {
 }
@@ -142,13 +167,25 @@ int FrameSegment::init()
 int FrameSegment::segment(char* nv12Buf, int width, int height, char* maskBuf)
 {
     Scalar mean = { 0.0, 0.0, 0.0, 0.0 };
-
     Mat frame, blob;
-    VideoCapture cap;
-    cap.open("test.mp4");
-    cap >> frame;
-    blobFromImage(frame, blob, scale, Size(frame.cols, frame.rows), Scalar(), swapRB, false);
 
+    //VideoCapture cap;
+    //cap.open("test.mp4");
+    //cap >> frame;
+
+    char* bufYV12;
+    int size = width * height * 3 / 2;
+    bufYV12 = new char[size];
+    memset(bufYV12, 0, size);
+    cvtNV12toYV12(bufYV12, nv12Buf, width, height);
+    frame = Mat(height * 3 / 2, width, CV_8UC1, bufYV12);
+    if (frame.empty())
+    {
+        delete [] bufYV12;
+        return -1;
+    }
+
+    blobFromImage(frame, blob, scale, Size(frame.cols, frame.rows), Scalar(), swapRB, false);
     net.setInput(blob);
 
     std::vector<String> outNames(2);
@@ -202,6 +239,7 @@ int FrameSegment::segment(char* nv12Buf, int width, int height, char* maskBuf)
         }
     }
 
+    delete[] bufYV12;
     return 0;
 }
 

@@ -21,7 +21,7 @@ public:
 
     int init();
     int init(string model, string config);
-    int segment(char* maskBuf);
+    int segment(char* nv12Buf, int width, int height, char* maskBuf);
     int destroy();
 private:
     int loadNet();

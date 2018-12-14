@@ -139,7 +139,7 @@ int FrameSegment::init()
     return 0;
 }
 
-int FrameSegment::segment(char* maskBuf)
+int FrameSegment::segment(char* nv12Buf, int width, int height, char* maskBuf)
 {
     Scalar mean = { 0.0, 0.0, 0.0, 0.0 };
 
